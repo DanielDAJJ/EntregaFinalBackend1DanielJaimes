@@ -1,0 +1,25 @@
+<div class="conteiner">
+    <div class="cabezote">
+        <h2>Super Tienda De Panes</h2>
+        <h3>La mejor tienda de panes de la ciudad</h3>
+    </div>
+    <hr>
+    <div class="productContainer">
+        {{#each products}}
+            <div class="card">
+                <img src="{{image}}" alt="{{title}}" class="cardImg">
+                <div class="card-body">
+                    <h5 class="card-title">{{title}}</h5>
+                    <p class="card-text">{{description}}</p>
+                    <p class="card-text">Código: {{code}}</p>
+                    <p class="card-text">Precio: ${{price}}</p>
+                    <p class="card-text">Hay {{stock}} disponibles</p>
+                    <p class="card-text">Tipo de pan: {{category}}</p>
+                </div>
+            </div>
+        {{/each}}
+    </div>
+    <div class="bottomContainer"></div>
+</div>
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/index.js"></script>
