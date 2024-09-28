@@ -32,7 +32,7 @@ const getProducts = async () => {
     let response = await fetch(`/api/products?page=${page}`);
     let data = await response.json();
     console.log(data);
-    data.products.docs.forEach(u=>{
+    data.docs.forEach(u=>{
         let cardDivProduct = document.createElement('div');
         cardDivProduct.className = 'card';
         cardDivProduct.innerHTML = `
@@ -55,21 +55,21 @@ const getProducts = async () => {
     divBottom.appendChild(aFirstPage);
     const aPrevPage = document.createElement('a');
     aPrevPage.innerText = 'Página anterior';
-    aPrevPage.href = `/?page=${data.products.prevPage}`;
+    aPrevPage.href = `/?page=${data.prevPage}`;
     divBottom.appendChild(aPrevPage);
-    if (!data.products.hasPrevPage) {
+    if (!data.hasPrevPage) {
         aPrevPage.classList.add('hidden')
     };
     const aNextPage = document.createElement('a');
     aNextPage.innerText = 'Página siguiente';
-    aNextPage.href = `/?page=${data.products.nextPage}`;
+    aNextPage.href = `/?page=${data.nextPage}`;
     divBottom.appendChild(aNextPage);
-    if (!data.products.hasNextPage) {
+    if (!data.hasNextPage) {
         aNextPage.classList.add('hidden');
     };
     const aLastPage = document.createElement('a');
     aLastPage.innerText = 'Última Página';
-    aLastPage.href = `/?page=${data.products.totalPages}`;
+    aLastPage.href = `/?page=${data.totalPages}`;
     divBottom.appendChild(aLastPage);
 }
 getProducts();

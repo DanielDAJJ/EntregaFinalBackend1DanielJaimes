@@ -21,17 +21,40 @@ export const router = Router();
     }
 }); */
 router.get('/', async (req, res) => {
-    let {page, limit} = req.query;
+    let {page, limit, sort, ...filters} = req.query;
     if (!page || isNaN(Number(page))) {
         page = 1;
     };
     if (!limit || isNaN(Number(limit))) {
-        limit = 3;
+        limit = 10;
     };
+    if (sort) {
+        let sortBy;
+        if(sort.toLowerCase() === "asc" || sort == 1){
+            sortBy = 1;
+        } else if (sort.toLowerCase() === "desc" || sort == -1){
+            sortBy = -1;
+        } else {
+            res.setHeader('Content-Type', 'application/json');
+            return res.status(400).json({ error: `Invalid sort value` })
+        }
+        sort = {price: sortBy}
+    };
+    let filter ={};
+    Object.keys(filters).forEach(key => {
+        const keyLower = key.toLowerCase();
+        if(keyLower === 'category'){
+            filter[keyLower] = { $regex: filters[key], $options: 'iu' }
+        }
+    });
     try {
-        let products = await productsManager.getProductsPaginate(page, limit);
+        let product = await productsManager.getProductsBy(filter);
+        if(!product){
+            return res.status(404).json({message: 'Categoria no encontrada'});
+        };
+        let products = await productsManager.getProductsPaginate(page, limit, sort, filter);
         res.setHeader('Content-Type', 'application/json');
-        return res.status(200).json({products});
+        return res.status(200).json({...products});
     } catch (error) {
         console.log(error);
         res.setHeader('Content-Type', 'application/json');
@@ -42,7 +65,7 @@ router.get('/', async (req, res) => {
             }
         )
     }
-})
+});
 router.get('/:id', async (req, res) => {
     let {id} = req.params;
     try {
@@ -60,9 +83,6 @@ router.get('/:id', async (req, res) => {
         )
     }
 });
-router.get('/', async (req, res) => {
-    
-})
 router.post('/', async (req, res) => {
     let {
         title,

@@ -23,11 +23,11 @@ app.use('/api/products', (req, res, next) =>{
     req.io = io;
     next()
 } ,productsRouter);
-app.use('/api/cart', (req, res, next) =>{
+app.use('/api/carts', (req, res, next) =>{
     req.io = io;
     next()
 } , cartRouter);
-app.use('/', viewsRouter);
+app.use('/products', viewsRouter);
 
 connDB()
 
